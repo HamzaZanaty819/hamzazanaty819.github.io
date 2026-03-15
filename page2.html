@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>CS Login</title>
+<title>Login</title>
 <style>
     body {
         background-color: black;
@@ -93,13 +93,26 @@
 
 <script>
 function login() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    // Get the input values
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
     const msg = document.getElementById("loginMessage");
 
-}
-</script>
+    // Load accounts from localStorage
+    let accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
 
+    // Find matching account (email case-insensitive)
+    const account = accounts.find(acc => 
+        acc.username.toLowerCase() === username.toLowerCase() && acc.password === password
+    );
+
+if (account) {
+    window.open("vidoe.html", "_blank"); // Opens in a new tab
+} else {
+    msg.innerText = "Invalid email or password!";
+}
+     }
+</script>
 
 </body>
 </html>

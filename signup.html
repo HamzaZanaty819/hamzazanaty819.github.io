@@ -68,6 +68,19 @@
         font-size: 12px;
         margin-top: 10px;
     }
+
+    .login-link {
+        display: block;
+        margin-top: 15px;
+        font-size: 14px;
+        color: lightblue;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .login-link:hover {
+        color: #88f;
+    }
 </style>
 </head>
 <body>
@@ -80,24 +93,29 @@
     <button onclick="signUp()">Create Account</button>
     <div id="signupMessage" class="error"></div>
     <p class="note">If any issues occur, contact our team</p>
+
+    <a href="login.html" class="login-link">Already have an account? Login here</a>
 </div>
 
 <script>
-    // Pre-approved codes (each can only be used once)
-    let validCodes = [
-        "1234567895",
-        "whaks678as",
-        "laie2536ms"
-    ];
-
-    // Temporary accounts storage
-    let accounts = [];
+    // Initialize codes in localStorage if not already present
+    if (!localStorage.getItem("validCodes")) {
+        localStorage.setItem("validCodes", JSON.stringify([
+            "1234567895",
+            "whaks678as",
+            "laie2536ms"
+        ]));
+    }
 
     function signUp() {
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
         const code = document.getElementById("code").value.trim();
         const msg = document.getElementById("signupMessage");
+
+        // Load accounts and codes from localStorage
+        let accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
+        let validCodes = JSON.parse(localStorage.getItem("validCodes") || "[]");
 
         // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -113,14 +131,13 @@
             return;
         }
 
-        // Code must be exactly 10 letters or numbers
         if (!/^[a-zA-Z0-9]{10}$/.test(code)) {
             msg.innerText = "Code must be exactly 10 letters or numbers!";
             msg.className = "error";
             return;
         }
 
-        // Check if code is in the list
+        // Check if code exists and hasn’t been used
         const codeIndex = validCodes.indexOf(code);
         if (codeIndex === -1) {
             msg.innerText = "Invalid or already used code!";
@@ -135,11 +152,13 @@
             return;
         }
 
-        // Save account
+        // Save account to localStorage
         accounts.push({username: email, password: password});
+        localStorage.setItem("accounts", JSON.stringify(accounts));
 
-        // Remove used code
+        // Remove used code permanently
         validCodes.splice(codeIndex, 1);
+        localStorage.setItem("validCodes", JSON.stringify(validCodes));
 
         msg.innerText = "Account created successfully!";
         msg.className = "success";
