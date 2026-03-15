@@ -84,7 +84,7 @@
     <h2>Login</h2>
     <input type="text" id="username" placeholder="Email"><br>
     <input type="password" id="password" placeholder="Password"><br>
-    <button onclick="login()">Login</button>
+    <button onclick="loginUser()">Login</button>
     <div id="loginMessage" class="error"></div>
     <p class="note">If any issues occur, contact our team</p>
 
@@ -92,26 +92,33 @@
 </div>
 
 <script>
-function login() {
-    // Get the input values
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const msg = document.getElementById("loginMessage");
+async function loginUser() {
+  const email = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const msg = document.getElementById("loginMessage");
 
-    // Load accounts from localStorage
-    let accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
+  const url = "YOUR_WEB_APP_URL"; // Replace with your Apps Script URL
+  const params = new URLSearchParams({
+    action: "login",
+    email: email,
+    password: password,
+    key: "YOUR_SECRET_KEY" // optional security key
+  });
 
-    // Find matching account (email case-insensitive)
-    const account = accounts.find(acc => 
-        acc.username.toLowerCase() === username.toLowerCase() && acc.password === password
-    );
+  try {
+    const response = await fetch(`${url}?${params.toString()}`);
+    const data = await response.text();
 
-if (account) {
-    window.open("vidoe.html", "_blank"); // Opens in a new tab
-} else {
-    msg.innerText = "Invalid email or password!";
+    if(data === "success") {
+      window.location.href = "vidoe.html"; // go to videos page
+    } else {
+      msg.innerText = data; // show error returned from Apps Script
+    }
+  } catch (err) {
+    msg.innerText = "Server error, try again later.";
+    console.error(err);
+  }
 }
-     }
 </script>
 
 </body>
