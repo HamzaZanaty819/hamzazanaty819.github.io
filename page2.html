@@ -97,29 +97,9 @@ function login() {
     const password = document.getElementById("password").value;
     const msg = document.getElementById("loginMessage");
 
-    // Load accounts from localStorage
-    let accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
-
-    const account = accounts.find(acc => acc.username === username && acc.password === password);
-
-    if (account) {
-        alert("Login successful!");
-        window.location.href = "page2.html"; // redirect after login
-    } else {
-        msg.innerText = "Invalid email or password!";
-    }
 }
 </script>
 
-// Load existing accounts
-let accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
 
-// After validation
-accounts.push({username: email, password: password});
-localStorage.setItem("accounts", JSON.stringify(accounts));
-
-// Save account after signup
-accounts.push({username: email, password: password});
-localStorage.setItem("accounts", JSON.stringify(accounts));
 </body>
 </html>
