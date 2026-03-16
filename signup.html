@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sign Up</title>
+<style>
+body { background-color:black; color:purple; font-family:Arial; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; }
+.signup-box { background:#2c2c2c; padding:40px; border-radius:10px; text-align:center; width:350px; box-shadow:2px 2px 15px rgba(0,0,0,0.5);}
+.signup-box input { width:90%; padding:10px; margin:10px 0; border:none; border-radius:5px; outline:none; }
+.signup-box button { background-color:purple; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; }
+.error { color:red; margin-top:10px; }
+.success { color:lightgreen; margin-top:10px; }
+.note { color: lightgray; font-size:12px; margin-top:10px; }
+.login-link { color:lightblue; text-decoration:underline; cursor:pointer; display:block; margin-top:15px; }
+</style>
+</head>
+<body>
+
+<div class="signup-box">
+<h2>Sign Up</h2>
+<input type="text" id="email" placeholder="Email"><br>
+<input type="password" id="password" placeholder="Password"><br>
+<input type="text" id="code" placeholder="Enter your 10-character code"><br>
+<button onclick="signupUser()">Create Account</button>
+<div id="signupMessage" class="error"></div>
+<p class="note">If any issues occur, contact our team</p>
+<a href="login.html" class="login-link">Already have an account? Login here</a>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyTmciShQPCZr4NEM56oN24emlEaLbI9rcv5DzJ7cOsncYCoNjZ5vZQw9OvafAQqWvo/exec";
+
+async function signupUser() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const code = document.getElementById("code").value.trim();
+    const msg = document.getElementById("signupMessage");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) { msg.innerText="Enter valid email!"; msg.className="error"; return; }
+    if (!password) { msg.innerText="Enter a password!"; msg.className="error"; return; }
+    if (!/^[a-zA-Z0-9]{10}$/.test(code)) { msg.innerText="Code must be exactly 10 letters or numbers!"; msg.className="error"; return; }
+
+    try {
+        const response = await fetch(WEB_APP_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action:"signup", email, password, code })
+        });
+        const result = await response.text();
+        if(result === "Success") {
+            msg.innerText = "Account created successfully!";
+            msg.className = "success";
+            setTimeout(()=>{ window.location.href="login.html"; },1500);
+        } else {
+            msg.innerText = result;
+            msg.className = "error";
+        }
+    } catch(err) {
+        msg.innerText = "Error connecting to server.";
+        msg.className = "error";
+        console.error(err);
+    }
+}
+</script>
+
+</body>
+</html>
