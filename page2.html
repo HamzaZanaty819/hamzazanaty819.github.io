@@ -24,19 +24,14 @@ body { background:black; color:purple; font-family:Arial; display:flex; justify-
 </div>
 
 <script>
-// Your deployed Google Apps Script Web App URL
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzdkaaC5PyS_jT9uR308Gw0RCo5m2bnwQpOnmmshIxVhNkfo-BlZqGVgttx6DBPmHA-/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx5TQWKQFmdO1eSy0wR6QP46f-7wALpxkYxIDHFvJ2B0hSLU1hVKMYmytkEohQe8JIS/exec";
 
 async function loginUser() {
     const email = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
     const msg = document.getElementById("loginMessage");
 
-    if(!email || !password){ 
-        msg.innerText="Enter email and password!"; 
-        msg.className="error"; 
-        return; 
-    }
+    if(!email || !password){ msg.innerText="Enter email and password!"; return; }
 
     try {
         const response = await fetch(WEB_APP_URL, {
@@ -45,9 +40,7 @@ async function loginUser() {
             body:JSON.stringify({ action:"login", email, password })
         });
         const result = await response.text();
-
         if(result==="Success"){
-            // Store session
             localStorage.setItem("loggedIn","true");
             localStorage.setItem("userEmail",email);
             window.location.href="video.html";
@@ -57,11 +50,9 @@ async function loginUser() {
         }
     } catch(err){
         msg.innerText="Error connecting to server.";
-        msg.className="error";
         console.error(err);
     }
 }
 </script>
-
 </body>
 </html>
