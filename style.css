@@ -1,0 +1,42 @@
+body {
+    background-color: white
+}
+
+h1 {
+    color: darkblue;
+    text-align: center;
+}
+
+p {
+    font-size: 20px;
+}
+h2 {
+    color: darkblue;
+    text-align:left
+}
+.box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: purple;
+    color: white;
+    padding: 15px 25px;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 18px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.5); 
+}
+.welcome-box {        
+    position: fixed
+    top: 50%;                  
+    right: 50x;                
+    transform: translateY(-50%);  
+    background-color: lightblue;    
+    color: black;               
+    padding: 20px 30px;         
+    border-radius: 10px;        
+    font-size: 18px;             
+    font-weight: bold;           
+    text-align: center;          
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.5); 
+}
